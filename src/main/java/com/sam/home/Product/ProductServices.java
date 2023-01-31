@@ -3,7 +3,32 @@ package com.sam.home.Product;
 import java.util.List;
 
 public class ProductServices {
+	private ProductDAO productDAO;
+	private ProductOptionDTO productOptionDTO;
+	private ProductDTO productDTO;
+	
+	public ProductServices() {
+		productDAO = new ProductDAO();
+		productDTO = new ProductDTO();
+		productOptionDTO = new ProductOptionDTO();
+	}
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
 
+	// 상품 하나 추가하기 서비스 클래스
+	public int AddProduct(ProductDTO productDTO, List<ProductOptionDTO> ar) throws Exception {
+		int productNum = productDAO.getProductNum(); // 시퀀스 번호 구하기
+		int result = productDAO.AddProduct(productNum, productDTO);
+		
+		for(ProductOptionDTO productOptionDTO : ar) {
+			productOptionDTO.setProduct_num(productNum);
+			result = productDAO.AddProductOption(productOptionDTO);
+		}
+		return result;
+	}
+	
+	
 	public static void main(String[] args){
 		// TODO Auto-generated method stub
 		ProductDAO productDAO = new ProductDAO();
